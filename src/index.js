@@ -4,7 +4,7 @@ const { PrismaClient } = require("@prisma/client");
 const resolvers = {
   Query: {
     info: () => `This is the API of a Hackernews Clone`,
-    feed: () => async (_, __, context) => {
+    feed: async (_, __, context) => {
       return context.prisma.link.findMany();
     },
     link: (_, args, context) =>
@@ -24,14 +24,17 @@ const resolvers = {
       });
       return newLink;
     },
-    updateLink: (_, args) => {
-      const updateLink = {
-        ...(!!args.description && { description: args.description }),
-        ...(!!args.url && { url: args.url }),
-      };
-      const indexUpdate = links.findIndex(link => link.id === args.id);
-      links[indexUpdate] = { ...links[indexUpdate], ...updateLink };
-      return updateLink;
+    updateLink: (_, args, context) => {
+      const updatedLink = context.prisma.link.update({
+        where: {
+          id: args.id,
+        },
+        data: {
+          ...(!!args.description && { description: args.description }),
+          ...(!!args.url && { url: args.url }),
+        },
+      });
+      return updatedLink;
     },
     deleteLink: (_, args) => {
       links = links.filter(link => link.id !== args.id);
