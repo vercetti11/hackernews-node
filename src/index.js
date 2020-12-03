@@ -1,23 +1,28 @@
 const { GraphQLServer } = require("graphql-yoga");
 const { PrismaClient } = require("@prisma/client");
 
-// Next, you need to update the implementation of the resolver functions because they’re still accessing the variables that were just deleted. Plus, you now want to return actual data from the database instead of local dummy data.
-
 const resolvers = {
   Query: {
     info: () => `This is the API of a Hackernews Clone`,
-    feed: () => links,
-    link: (_, args) => links.find(link => link.id === args.id),
+    feed: () => async (_, __, context) => {
+      return context.prisma.link.findMany();
+    },
+    link: (_, args, context) =>
+      context.prisma.link.findUnique({
+        where: {
+          id: args.id,
+        },
+      }),
   },
   Mutation: {
-    post: (_, args) => {
-      const link = {
-        id: `link-${idCount++}`,
-        description: args.description,
-        url: args.url,
-      };
-      links.push(link);
-      return link;
+    post: (_, args, context) => {
+      const newLink = context.prisma.link.create({
+        data: {
+          url: args.url,
+          description: args.description,
+        },
+      });
+      return newLink;
     },
     updateLink: (_, args) => {
       const updateLink = {
