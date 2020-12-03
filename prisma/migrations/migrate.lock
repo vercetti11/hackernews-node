@@ -3,3 +3,4 @@
 20201203122105-init
 20201203162901-added-user-model
 20201203192139-patched-schema-prisma-user-model-from-link-to-links
+20201203234947-add-vote-model
