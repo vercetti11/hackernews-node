@@ -36,9 +36,11 @@ const resolvers = {
       });
       return updatedLink;
     },
-    deleteLink: (_, args) => {
-      links = links.filter(link => link.id !== args.id);
-      return { id: args.id };
+    deleteLink: (_, args, context) => {
+      const deleteLink = context.prisma.link.delete({
+        where: { id: parseInt(args.id) },
+      });
+      return deleteLink;
     },
   },
 };
