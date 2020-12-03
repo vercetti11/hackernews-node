@@ -1,6 +1,7 @@
 const { GraphQLServer } = require("graphql-yoga");
 const { PrismaClient } = require("@prisma/client");
-
+// Branch initial message
+// In this section, I'm going to implement signup and login functionality that allows users to authenticate against the GraphQL server.
 const resolvers = {
   Query: {
     info: () => `This is the API of a Hackernews Clone`,
