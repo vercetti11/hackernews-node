@@ -15,13 +15,6 @@ const post = (_, args, context) => {
 
 const updateLink = (_, args, context) => {
   const userId = getUserId(context);
-  const reqPost = context.prisma.link.findUnique({
-    where: { id: parseInt(args.id) },
-  });
-  console.log(`🚧 postedByID: ${reqPost.id} userID: ${userId}`);
-  if (reqPost.postedBy !== userId) {
-    throw new Error("Not Authorized or resource does not exist");
-  }
 
   const updatedLink = context.prisma.link.update({
     where: {
