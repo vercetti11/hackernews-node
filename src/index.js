@@ -10,7 +10,7 @@ const resolvers = {
     link: (_, args, context) =>
       context.prisma.link.findUnique({
         where: {
-          id: args.id,
+          id: parseInt(args.id),
         },
       }),
   },
@@ -27,7 +27,7 @@ const resolvers = {
     updateLink: (_, args, context) => {
       const updatedLink = context.prisma.link.update({
         where: {
-          id: args.id,
+          id: parseInt(args.id),
         },
         data: {
           ...(!!args.description && { description: args.description }),
