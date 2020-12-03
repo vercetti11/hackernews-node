@@ -14,6 +14,15 @@ const post = (_, args, context) => {
 };
 
 const updateLink = (_, args, context) => {
+  const userId = getUserId(context);
+  const reqPost = context.prisma.link.findUnique({
+    where: { id: parseInt(args.id) },
+  });
+  console.log(`🚧 postedByID: ${reqPost.id} userID: ${userId}`);
+  if (reqPost.postedBy !== userId) {
+    throw new Error("Not Authorized or resource does not exist");
+  }
+
   const updatedLink = context.prisma.link.update({
     where: {
       id: parseInt(args.id),
@@ -54,7 +63,7 @@ async function signup(_, args, context) {
 
 async function login(_, args, context) {
   // 1
-  const user = await context.prisma.user.findOne({
+  const user = await context.prisma.user.findUnique({
     where: { email: args.email },
   });
   if (!user) {
