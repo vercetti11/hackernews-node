@@ -1,11 +1,16 @@
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { APP_SECRET, getUserId } = require("../utils");
+
 const post = (_, args, context) => {
-  const newLink = context.prisma.link.create({
+  const userId = getUserId(context);
+  return context.prisma.link.create({
     data: {
       url: args.url,
       description: args.description,
+      postedBy: { connect: { id: userId } },
     },
   });
-  return newLink;
 };
 
 const updateLink = (_, args, context) => {
