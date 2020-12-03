@@ -24,6 +24,15 @@ const resolvers = {
       links.push(link);
       return link;
     },
+    updateLink: (_, args) => {
+      const updateLink = {
+        ...(!!args.description && { description: args.description }),
+        ...(!!args.url && { url: args.url }),
+      };
+      const indexUpdate = links.findIndex(link => link.id === args.id);
+      links[indexUpdate] = { ...links[indexUpdate], ...updateLink };
+      return updateLink;
+    },
   },
 };
 
