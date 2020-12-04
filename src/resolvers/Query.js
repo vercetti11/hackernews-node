@@ -13,7 +13,10 @@ const feed = async (_, args, context) => {
     take: args.take,
     orderBy: args.orderBy,
   });
-  return links;
+
+  const count = await context.prisma.link.count({ where });
+
+  return { links, count };
 };
 
 const link = (_, args, context) =>
